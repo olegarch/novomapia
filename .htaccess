@@ -223,6 +223,8 @@ AddType text/x-vcard                        vcf
 # Perhaps better to whitelist expires rules? Perhaps.
   ExpiresDefault                          "access plus 1 month"
 
+  ExpiresByType text/plain                "access plus 60 seconds"
+
 # cache.appcache needs re-requests in FF 3.6 (thanks Remy ~Introducing HTML5)
   ExpiresByType text/cache-manifest       "access plus 0 seconds"
 
@@ -322,8 +324,8 @@ FileETag None
 # Turning on the rewrite engine is necessary for the following rules and features.
 # FollowSymLinks must be enabled for this to work.
 
+#  Options +FollowSymlinks
 <IfModule mod_rewrite.c>
-  Options +FollowSymlinks
   RewriteEngine On
 </IfModule>
 
@@ -468,7 +470,7 @@ AddCharset utf-8 .css .js .xml .json .rss .atom
 # Block access to backup and source files
 # This files may be left by some text/html editors and
 # pose a great security danger, when someone can access them
-<FilesMatch "(\.(bak|config|sql|fla|psd|ini|log|sh|inc|swp|dist)|~)$">
+<FilesMatch "(\.(py|pyc|bak|config|sql|fla|psd|ini|log|sh|inc|swp|dist)|~)$">
   Order allow,deny
   Deny from all
   Satisfy All
@@ -534,3 +536,15 @@ AddCharset utf-8 .css .js .xml .json .rss .atom
 <IfModule php5_module>
   php_value session.cookie_httponly true
 </IfModule>
+
+# Redirect news2rujson to another location
+#<IfModule mod_rewrite.c>
+#  RewriteEngine On
+#  RewriteRule ^news2ru/json/$ http://wimaxly.com/g3/news2ru/ [L]
+#</IfModule>
+
+<IfModule mod_fcgi.c>
+    AddHandler fcgid-script .fcgi
+</IfModule>
+
+RewriteRule ^news2ru/json/$ /main.fcgi/$1 [QSA,L]

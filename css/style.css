@@ -266,7 +266,7 @@ body  {
 
 .cell:hover
 {
-	border: solid 1px red;
+	border: solid 1px white;
 	/*background-color: red;*/
 	z-index:500;
 }
@@ -277,7 +277,7 @@ body  {
 /*    padding-bottom:40px; */
     position: absolute;
     top: 41px;
-    bottom: 0px;
+    bottom: 20px;
     left: 0px;
     right: 0px;
     /*width:100%;
@@ -291,15 +291,38 @@ body  {
  /*.temp-show{position:absolute !important; display:block !important; color: red; } */
 
 
+#logo {
+display: inline-block;
+font-family: 'Cuprum',sans-serif; 
+font-size: 20px; 
+background-color: #E31A1C;
+border: solid 2px white;
+width: 20px;
+height: 20px;
+margin-right: 5px;
+}
 
 
 
+  #header-logo {
+    background-image: url('../apple-touch-icon_40x40.png');
+    width: 40px;
+    height: 40px;
+    margin-right: 5px;
+}
 
 
 
-
-
-
+.footer
+{
+    color: white;
+    font-size: 10px;
+    height: 20px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
 
 
 

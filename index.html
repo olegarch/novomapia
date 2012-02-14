@@ -12,22 +12,18 @@
        More info: h5bp.com/i/378 -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>news2 map</title>
+  <title>Новоmapia</title>
   <meta name="description" content="">
 
   <!-- Mobile viewport optimized: h5bp.com/viewport -->
   <meta name="viewport" content="width=device-width">
 
+  <link rel="image_src" href="http://novomapia.com/apple-touch-icon.png" />
+  
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link href='http://fonts.googleapis.com/css?family=Marmelad&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=PT+Sans+Narrow&subset=cyrillic,latin' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Cuprum&subset=latin,cyrillic' rel='stylesheet' type='text/css'>  
-  <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Tenor+Sans&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Bad+Script&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Andika&subset=latin,cyrillic' rel='stylesheet' type='text/css'>  
 
   <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
 
@@ -47,20 +43,17 @@
 <div class="navbar navbar-fixed-top">
   <div class="navbar-inner">
     <div class="container" style='font-family: "Cuprum",sans-serif'>
-<a class="brand" href="#" >
-  Новоmapia
-</a>
+        <a id="header-logo" class="pull-left">      
+        </a>
+        <!-- TODO: move it out of brand section -->
+<a class="brand" href="#" ><!-- <div id="logo">Nm</div> --> Новоmapia</a>
 <ul class="nav">
   <!-- li><a href="#">Home</a></li 
   <li id="relevance-link" class="active"><a href="#">Популярность</a></li>
   <li id="comments-link" ><a href="#">Комментарии</a></li> -->
   <li>
-<!-- Put this script tag to the place, where the Share button will be -->
-<script type="text/javascript"><!--
-document.write(VK.Share.button({url: "http://wimaxly.com/news2map/"},{type: "link", text: "Like"}));
---></script>  	
   </li>
-
+<!--
   <li class="dropdown" id="menu-color">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#menu-color">
       Цвет
@@ -110,8 +103,9 @@ document.write(VK.Share.button({url: "http://wimaxly.com/news2map/"},{type: "lin
   
 
 
-  
+-->  
   </ul>
+<!--
   <form class="navbar-search pull-left" action="">
             <input type="text" placeholder="Popularity function" id="input-popularity">
   </form>
@@ -124,14 +118,68 @@ document.write(VK.Share.button({url: "http://wimaxly.com/news2map/"},{type: "lin
   <form class="navbar-search pull-left" action="">
             <input type="text" placeholder="Color end" id="input-color-end">
   </form>  
-  
+--> 
+<ul class="nav">
+<li>
+<!-- Put this script tag to the place, where the Share button will be -->
+<!--
+<script type="text/javascript">
+
+document.write(VK.Share.button({
+  url: 'http://novomapia.com',
+  title: 'Новоmapia',
+  description: 'Новый способ узнавать самые свежие и самые обсуждаемые новости.',
+  image: 'http://novomapia.com/apple-touch-icon.png',
+  noparse: true
+},
+{type: 'custom', text: '<img src="http://vk.com/images/vk16.png" />'}));
+
+</script>
+-->
+</li>
+<li>
+<!-- AddThis Button BEGIN -->
+<script type="text/javascript">
+var addthis_config =
+{
+    ui_click: true,
+    services_compact: 'vk, odnoklassniki_ru, email, facebook, twitter, more',
+    services_exclude: 'print',
+    ui_language: 'ru',
+    /*ui_offset_top: 10,*/
+    data_track_clickback: false,
+    data_ga_tracker: 'UA-2393772-3',
+    ui_open_windows: true
+}
+</script>
+<div class="addthis_toolbox addthis_default_style addthis_32x32_style" style="padding-top: 4px"
+       addthis:url="http://novomapia.com"
+       addthis:title="Новоmapia"
+       addthis:description="Новый способ узнавать самые свежие и самые обсуждаемые новости">
+    <a class="addthis_button_vk"></a>
+    <a class="addthis_button_odnoklassniki_ru"></a>
+    <a class="addthis_button_facebook"></a>
+    <a class="addthis_button_twitter"></a>
+    <a class="addthis_button_google_plusone_badge" g:plusone:size="medium"></a>
+    <a class="addthis_button_email"></a>
+    <a class="addthis_button_compact"></a>
+    <a class="addthis_counter addthis_bubble_style"></a>
+</div>
+<script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=ra-4f39562b2d57b879"></script>
+<!-- AddThis Button END -->
+</li>
+</ul>
+ 
     </div>
   </div>
 </div>  
+
+
+
 <!--  <div role="main"> -->
 	  <div id="chart"></div> 
 <!--    </div> -->
-  <!-- <footer>  Footer  </footer> -->
+  <div class="footer">Источник новостей <b><a href="http://news2.ru/" class="footer-link">news2.ru</a></b>. Размер соответсвует рейтингу новости, а цвет количеству голосов и комментариев.</div>
   <!-- JavaScript at the bottom for fast page loading -->
 
   <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
@@ -142,8 +190,8 @@ document.write(VK.Share.button({url: "http://wimaxly.com/news2map/"},{type: "lin
   <script type="text/javascript" src="js/libs/bootstrap-tooltip.js"></script>
   <script type="text/javascript" src="js/libs/bootstrap-popover.js"></script>
   <script type="text/javascript" src="js/libs/bootstrap-dropdown.js"></script>
-  <script type="text/javascript" src="js/libs/d3.js"></script>
-  <script type="text/javascript" src="js/libs/d3.layout.js"></script>
+  <script type="text/javascript" src="js/libs/d3.min.js"></script>
+  <script type="text/javascript" src="js/libs/d3.layout.min.js"></script>
 
 
 
@@ -158,7 +206,7 @@ document.write(VK.Share.button({url: "http://wimaxly.com/news2map/"},{type: "lin
   <!-- Asynchronous Google Analytics snippet. Change UA-XXXXX-X to be your site's ID.
        mathiasbynens.be/notes/async-analytics-snippet -->
   <script>
-    var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+    var _gaq=[['_setAccount','UA-2393772-3'],['_trackPageview']];
     (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
     g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
     s.parentNode.insertBefore(g,s)}(document,'script'));
