@@ -2,22 +2,86 @@
 
 */
 
-Novomap = function()
+var NM = (function($)
 {
-}
+    var my = {},
+    maxVotes = 0,
+    minVotes = 10000000.,
+    maxComments = 0,
+    minComments = 1000000.,
+    newsCount = 1,
+    startColor = '#FFFFB2',
+    endColor = '#E31A1C',
+    d3_color_map = d3.scale.linear()
+                   .domain([0, 1])
+                   .range([startColor, endColor]),
+    div;            
+    
+
+    function resetColor()
+    {
+        d3.scale.linear()
+        .domain([0, 1])
+        .range([startColor, endColor]);
+    };
+    
+    var colorFunction = function(d)
+    {
+        if(d.children!=null)
+        {
+            maxVotes = d.maxVotes;
+            maxComments = d.maxComments;
+        }
+        if(minComments > (d.rawcomments) )
+        {
+            minComments = (d.rawcomments);
+        }
+        if(minVotes > (d.rawvotes))
+        {
+            minVotes = (d.rawvotes);
+        }
+        return d.children ? null : colormap(0.5);
+    };
+    
+    var sizeFunction = function(d){
+        return (d.rawvotes+d.rawcomments)/(newsCount-d.rawindex+1);
+        //return d.votes;
+    };
+    
+    var sortFunction = function(a,b)
+    {
+        return sizeFunction(a)-sizeFunction(b);
+    };    
+    
+    my.init = function()
+    {
+        d3.select("body").transition()
+        .duration(1000)
+        .style("background-color", "black");        
+        
+        div = d3.select("#chart").append("div")
+        .style("position", "absolute")
+        .style("width", "100%")
+        .style("height", "100%")
+        .style("margin", "0px")
+        .style("padding", "0px")
+        .style("border", "2px");        
+    };
+    
+    return my;
+}(jQuery));
 
 $(function() {
 
     $('.dropdown-toggle').dropdown();
 
 
-    var w = 1000,
-    h = 500,
     maxVotes = 0,
     minVotes = 10000000.,
     maxComments = 0,
     minComments = 1000000.,
-    votes_range = [];
+    votes_range = [],
+    newsCount = 1;
 
 
     //color = d3.scale.category20();
@@ -74,7 +138,7 @@ $(function() {
         return d.children ? null : colormap(0.5);
     };
     var sizeFunction = function(d){
-        return (d.rawvotes+d.rawcomments)/(26-d.rawindex);
+        return (d.rawvotes+d.rawcomments)/(newsCount-d.rawindex+1);
         //return d.votes;
     };
     var sortFunction = function(a,b)
@@ -333,7 +397,8 @@ $(function() {
 
     d3.json("http://novomapia.com/news2ru/json/", function(json) {
         //d3.json("file:///C:/aptana2ws/news2map/news2ru.json", function(json) {
-        
+        newsCount = json.children.length;
+
         var wi = div.style("width");
         wi = wi.substring(0,wi.length-2);
         var he = div.style("height");

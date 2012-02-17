@@ -5,9 +5,9 @@ from cgi import escape
 import sys, os
 
 def app(environ, start_response):
-    import news2ru
+    from news2ru_lxml import getNews
     start_response('200 OK', [('Content-Type', 'text/plain')])
-    return [news2ru.getNews()]
+    return [getNews()]
     
     #yield '<h1>FastCGI Environment</h1>'
     #yield '<table>'
