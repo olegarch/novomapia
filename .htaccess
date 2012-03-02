@@ -470,7 +470,7 @@ AddCharset utf-8 .css .js .xml .json .rss .atom
 # Block access to backup and source files
 # This files may be left by some text/html editors and
 # pose a great security danger, when someone can access them
-<FilesMatch "(\.(py|pyc|bak|config|sql|fla|psd|ini|log|sh|inc|swp|dist)|~)$">
+<FilesMatch "(\.(py|pyc|bak|config|sql|fla|psd|ini|log|sh|inc|swp|dist|template)|~)$">
   Order allow,deny
   Deny from all
   Satisfy All
@@ -547,4 +547,11 @@ AddCharset utf-8 .css .js .xml .json .rss .atom
     AddHandler fcgid-script .fcgi
 </IfModule>
 
-RewriteRule ^news2ru/json/$ /main.fcgi/$1 [QSA,L]
+#RewriteRule ^news2ru/json/$ /main.fcgi/$1 [QSA,L]
+#RewriteRule ^json/news2ru$ /main.fcgi/$1 [QSA,L]
+#RewriteRule ^json/membrana$ /main.fcgi/$1 [QSA,L]
+
+<IfModule mod_rewrite.c>
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ /main.fcgi/$1 [QSA,L]
+</IfModule>

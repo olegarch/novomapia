@@ -5,9 +5,15 @@ from cgi import escape
 import sys, os
 
 def app(environ, start_response):
-    from news2ru_lxml import getNews
-    start_response('200 OK', [('Content-Type', 'text/plain')])
-    return [getNews()]
+    from news2ru_lxml import getNews,getMembrana
+    if(environ['REQUEST_URI']=='/json/news2ru'):
+        start_response('200 OK', [('Content-Type', 'text/plain')])
+        return [getNews()]
+    elif(environ['REQUEST_URI']=='/json/membrana'):
+        start_response('200 OK', [('Content-Type', 'text/plain')])
+        return [getMembrana()]
+    else:
+        return []
     
     #yield '<h1>FastCGI Environment</h1>'
     #yield '<table>'
