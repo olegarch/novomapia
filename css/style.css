@@ -274,7 +274,18 @@ body  {
     z-index:500;
 }
 
-#chart {
+div#progress {
+    z-index: 5000;
+    position:absolute; 
+    top:50%;
+    left: 50%;
+    width:43px;
+    height:11px; 
+    margin-top:-5px;
+    margin-left:-21px;
+}
+
+div#chart {
     margin:0px;
     padding:0px;
 /*    padding-bottom:40px; */
@@ -294,7 +305,7 @@ body  {
  /*.temp-show{position:absolute !important; display:block !important; color: red; } */
 
 
-#logo {
+div#logo {
 display: inline-block;
 font-family: 'Cuprum',sans-serif; 
 font-size: 32px;

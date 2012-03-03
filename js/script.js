@@ -3,6 +3,8 @@
 */
 
 $(function(){
+    $.blockUI.defaults.css = {}; 
+    $("div#progress").hide();
     d3.select("body").transition()
     .duration(1000)
     .style("background-color", "black");
@@ -79,6 +81,7 @@ var NM = (function($)
     treemap,
     div,
     url,
+    timeoutId=null,
     colorFunction = function(d)
     {
         if(d.children!=null)
@@ -349,6 +352,31 @@ var NM = (function($)
     {
         params = params || {}
 
+        if(timeoutId!=null)
+        {
+            clearTimeout(timeoutId);
+            console.log("clearid="+timeoutId);
+        }
+
+        if(params.progress==undefined) 
+            params.progress = true;
+        
+        if(params.progress==true)
+        {
+            $.blockUI({ 
+                message: $('#progress'), 
+                css: { 
+                    top:  ($(window).height() - 11) /2 + 'px', 
+                    left: ($(window).width() - 43) /2 + 'px', 
+                    width: '43px', 
+                    height: '11px',
+                    baseZ: 10000
+                } 
+
+            });
+        }
+        
+
         //console.log(params.url);
         
         if(params.url==undefined)
@@ -366,7 +394,10 @@ var NM = (function($)
     
         d3.text(url, "application/json", function(text) 
         {
-            setTimeout( function() { NM.update({url:NM.url()}) }, 60000);
+            $.unblockUI();
+            
+            timeoutId = setTimeout( function() { NM.update({ url:NM.url(), progress:false }) },  120000);
+            console.log("timerid="+timeoutId);
             
             //console.log( new Date().getTime()/1000. );
             console.log( new Date().toUTCString() );

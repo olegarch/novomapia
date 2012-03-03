@@ -245,7 +245,7 @@ def getHelp():
     data['children'][-1]['title'] = '<b>важная</b>, но <span style="color: #777777">бледненькая</span> мало обсуждаемая новость'
     data['children'][-1]['id'] = len(data['children'])
     
-    return json.dumps(data,indent=2)
+    return json.dumps(data)
 
 def getMembranaPage(url):
     printTime("getMembrana start")
@@ -314,7 +314,7 @@ def getMembrana():
     data['children'] = membrana
     #map(lambda e: e['id'], data['children']
     
-    return json.dumps(data,indent=2)
+    return json.dumps(data)
     
         
 if __name__ == '__main__':
