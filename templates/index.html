@@ -45,7 +45,7 @@
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory: mathiasbynens.be/notes/touch-icons -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/bootstrap.min.css">
-  <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
+  <!--link rel="stylesheet" href="css/jquery.dropdown.css"-->
 
 
   <!-- More ideas for your <head> here: h5bp.com/d/head-Tips -->
@@ -78,37 +78,33 @@
   </li>
   <li class="dropdown active" id="src-menu">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#menu-source" id="src-menu-text">
-      <span>News2.ru</span>
+      <span>Источник</span>
       <b class="caret"></b>
     </a>
     <ul class="dropdown-menu">
-      <li id="src-menu-news2ru" class="active"><a href="news2ru">News2.ru</a></li>
-      <li id="src-menu-membrana"><a href="membrana">Мембрана</a></li>
-      <!-- li class="nav-header" id="src-menu-yandex"><a href="yandex">Яндекс</a></li>
-      <li class="nav-header" id="src-menu-habrhabr"><a href="habrahabr">Хабрхабр</a></li>
-      <li class="nav-header" id="src-menu-rambler"><a href="rambler">Рамблер</a></li-->
+      <li><input type="radio" name="sources" id="input-news2ru"  value="news2ru"/><label for="input-news2ru" >News2.ru</label></li>
+      <li><input type="radio" name="sources" id="input-membrana" value="membrana"/><label for="input-membrana" >Membrana.ru</label></li>
+      <li><input type="radio" name="sources" id="input-habr"     value="habr"/><label for="input-habr" >Habrahabr.ru</label></li>
+      <li><input type="radio" name="sources" id="input-rambler"  value="rambler"/><label for="input-rambler" >Rambler.ru</label></li>
+      <!-- li class="nav-header" id="src-menu-yandex"><a href="yandex">Яндекс</a></li-->
     </ul>
   </li>
-  
-  <li class="divider-vertical"></li>
-  <li id="help-menu"><a href="help">Хелп</a></li>
+  <!--li>
+    <a href="#" data-dropdown="#dropdown-1"><span>dropdown</span><b class="caret"></b></a>
+  </li-->
+
   <!--li id="popcom-scheme-menu" class="active"><a href="#">Популярность/Комментарии</a></li>
   <li id="compop-scheme-menu" ><a href="#">Комментарии/Популярность</a></li-->
-<!--
-  <li class="dropdown" id="menu-color">
+
+  <!--li class="dropdown" id="menu-color">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#menu-color">
       Цвет
       <b class="caret"></b>
     </a>
     <ul class="dropdown-menu">
-      <li><a href="#" id="menu-color-votescomments" class="active">Комментарии+Голоса</a></li>
-      <li><a href="#" id="menu-color-popularity" class="active">Популярность</a></li>
-      <li><a href="#" id="menu-color-index" class="active">Индекс</a></li>
-      <li><a href="#" id="menu-color-votes">Голоса</a></li>
-      <li><a href="#" id="menu-color-comments">Комментарии</a></li>
-      <li class="divider"></li>
-      <li><a href="#" id="menu-color-user">Пользователь</a></li>
-      <li><a href="#">Separated link</a></li>
+      <li><a href="#" id="menu-color-popularity">Популярность</a></li>
+      <li><a href="#" id="menu-color-votes">Комментарии</a></li>
+      <li><a href="#" id="menu-color-index">Индекс</a></li>
     </ul>
   </li>
 
@@ -118,35 +114,19 @@
       <b class="caret"></b>
     </a>
     <ul class="dropdown-menu">
-      <li><a href="#" id="menu-size-popularity" class="active">Популярность</a></li>
-      <li><a href="#" id="menu-size-index" class="active">Индекс</a></li>
-      <li><a href="#" id="menu-size-votes">Голоса</a></li>
-      <li><a href="#" id="menu-size-comments">Комментарии</a></li>
-      <li class="divider"></li>
-      <li><a href="#">Separated link</a></li>
+      <li><a href="#" id="menu-size-popularity">Популярность</a></li>
+      <li><a href="#" id="menu-size-votes">Комментарии</a></li>
+      <li><a href="#" id="menu-size-index">Индекс</a></li>
     </ul>
-  </li>  
-
-  <li class="dropdown" id="menu-sort">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#menu-sort">
-      Сортировка
-      <b class="caret"></b>
-    </a>
-    <ul class="dropdown-menu">
-      <li><a href="#" id="menu-sort-popularity" class="active">Популярность</a></li>
-      <li><a href="#" id="menu-sort-index" class="active">Индекс</a></li>
-      <li><a href="#" id="menu-sort-votes">Голоса</a></li>
-      <li><a href="#" id="menu-sort-comments">Комментарии</a></li>
-      <li class="divider"></li>
-      <li><a href="#">Separated link</a></li>
-    </ul>
-  </li>
+  </li-->  
   
+  
+  <li id="help-menu"><a href="help">Что это?</a></li>
+  <li class="divider-vertical"></li>
 
 
--->  
-  </ul>
 <!--
+  <li>
   <form class="navbar-search pull-left" action="">
             <input type="text" placeholder="Popularity function" id="input-popularity">
   </form>
@@ -159,25 +139,9 @@
   <form class="navbar-search pull-left" action="">
             <input type="text" placeholder="Color end" id="input-color-end">
   </form>  
+  </li>
 --> 
-<ul class="nav">
-<li>
-<!-- Put this script tag to the place, where the Share button will be -->
-<!--
-<script type="text/javascript">
 
-document.write(VK.Share.button({
-  url: 'http://novomapia.com',
-  title: 'Новоmapia',
-  description: 'Новый способ узнавать самые свежие и самые обсуждаемые новости.',
-  image: 'http://novomapia.com/apple-touch-icon.png',
-  noparse: true
-},
-{type: 'custom', text: '<img src="http://vk.com/images/vk16.png" />'}));
-
-</script>
--->
-</li>
 <li>
 <!-- AddThis Button BEGIN -->
 <script type="text/javascript">
@@ -254,10 +218,11 @@ var addthis_config =
   <script type="text/javascript" src="js/libs/d3.layout.min.js"></script>
 
 
-
+<!-- { { { -->
   <script>
-  var currentPage = "{{ news_source }}";
+  var currentPage = {{ news_source|safe }};
   </script>
+<!-- } } } -->
 
   <!-- scripts concatenated and minified via build script -->
   <script src="js/plugins.js"></script>
@@ -273,5 +238,22 @@ var addthis_config =
     g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
     s.parentNode.insertBefore(g,s)}(document,'script'));
   </script>
+    <!--div id="dropdown-1" class="dropdown-menu has-tip">
+        <ul>
+            <li id="src-menu-all"><a href="membrana+rambler">Все новости</a></li>
+            <li id="src-menu-news2ru" class="active"><a href="news2ru">News2.ru</a></li>
+            <li id="src-menu-membrana"><a href="membrana">Membrana.ru</a></li>
+            <li id="src-menu-habr"><a href="habr">Habrahabr.ru</a></li>
+            <li id="src-menu-rambler"><a href="rambler">News.Rambler.ru</a></li>
+      
+            <li><a href="#1">Item 1</a></li>
+            <li><a href="#2">Item 2</a></li>
+            <li><a href="#3">Item 3</a></li>
+            <li class="divider"></li>
+            <li><a href="#4">Item 4</a></li>
+            <li><a href="#5">Item 5</a></li>
+            <li><a href="#5">Item 6</a></li>
+        </ul>
+    </div-->   
 </body>
 </html>

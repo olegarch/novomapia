@@ -537,19 +537,9 @@ AddCharset utf-8 .css .js .xml .json .rss .atom
   php_value session.cookie_httponly true
 </IfModule>
 
-# Redirect news2rujson to another location
-#<IfModule mod_rewrite.c>
-#  RewriteEngine On
-#  RewriteRule ^news2ru/json/$ http://wimaxly.com/g3/news2ru/ [L]
-#</IfModule>
-
 <IfModule mod_fcgi.c>
     AddHandler fcgid-script .fcgi
 </IfModule>
-
-#RewriteRule ^news2ru/json/$ /main.fcgi/$1 [QSA,L]
-#RewriteRule ^json/news2ru$ /main.fcgi/$1 [QSA,L]
-#RewriteRule ^json/membrana$ /main.fcgi/$1 [QSA,L]
 
 <IfModule mod_rewrite.c>
     RewriteCond %{REQUEST_FILENAME} !-f

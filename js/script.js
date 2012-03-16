@@ -1,14 +1,35 @@
 /* Author:
 
 */
+function updateSourceCheckboxes()
+{
+    for(var i=0; i<currentPage.length; i++)
+    {
+        $('input[name="sources"][value="'+currentPage[i]+'"]').prop("checked",true);
+        console.log('!!!! '+i);
+    //do something by accessing valueArray[i];
+    }
+}
 
 $(function(){
     $.blockUI.defaults.css = {}; 
     $("div#progress").hide();
-    d3.select("body").transition()
-    .duration(1000)
+    d3.select("body")
+    //.transition()
+    // .duration(1000)
     .style("background-color", "black");
+    
+/*    var menu = $('#src-menu > .dropdown-menu').find('*');
+    menu.click(function(e) {
+        e.stopPropagation();
+    });
+*/
+    //$('.dropdown-toggle').dropdown();
+    
+    updateSourceCheckboxes();
 });
+
+
 
 $.fn.hasOverflow = function() 
 {
@@ -71,8 +92,9 @@ var NM = (function($)
     minComments = 1000000.,
     newsCount = 1,
     savedData,
-    startColor = '#FFFFB2',
-    endColor = '#E31A1C',
+    startColor = '#FFFFB2', //255,255,178
+    endColor = '#E31A1C',   //227,26,28
+    gradientColors = [],
     minUserColorValue = 10000000.,
     maxUserColorValue = 0., 
     colormap = d3.scale.linear()
@@ -99,9 +121,11 @@ var NM = (function($)
         }
         return d.children ? null : colormap(0.5);
     },
+    
     sizeFunction = function(d){
         return d.popularity;
     },
+    
     sortFunction = function(a,b)
     {
         return sizeFunction(a)-sizeFunction(b);
@@ -121,34 +145,7 @@ var NM = (function($)
         .domain([0, 1])
         .range([startColor, endColor]);
     };
- /*   
-    function autofit(d,i)
-    {
-        var elm = $(this),
-        iter=0,
-        ratio = 1.;
-//        console.log(i+': '+ d.area +'(' +d.dx+' '+d.dy+') , '+elm.css("font-size"));
-        elm.css("font-size","100px");
-        d.fontsize=100.;
-//        while(elm.hasOverflow()){
-        while( (ratio=elm.hasOverflow3())!=1 )
-        {
-            iter+=1;
-            //var size = parseFloat(elm.css('font-size'));
-            //console.log(elm.css('font-size'),d.fontsize);
-            //size -= 1;
-            d.fontsize /= ratio;
-            elm.css('font-size', d.fontsize + 'px');
-            //console.log(elm.css('font-size'),d.fontsize);
-            //iter_2[i]+=1;
-            if(iter>5) break;
-        }    
-//        console.log(i+': '+ d.area +'(' +d.dx+' '+d.dy+') , '+elm.css("font-size"));
-        //console.log('2. w:'+ elm.width() + ' h:'+elm.height()+' sz:'+elm.css('font-size')+'('+elm.text()+')');
-        //$('.newslink').css('display','inline-block');
-        //if(iter_1[i]!=iter_2[i]) console.log('1: (' +i+')'+iter_1[i]+' 2: '+iter_2[i]);
-    }
-    */
+    
     function calculateTargetFontSize(d,i)
     {
         //if(i<1) return;
@@ -210,7 +207,7 @@ var NM = (function($)
         treemap.size([wi-1,he-1]);
         
         div.selectAll("div")
-        .data( treemap.nodes, function(d){ return d.id; } )
+        .data(treemap.nodes, function(d){ return d.id; })
         .each(calculateTargetFontSize)
         //.transition()
         .style('font-size', function(d){ return d.fontsize+'px'; })
@@ -330,26 +327,10 @@ var NM = (function($)
     {
         //console.log(d.title, Math.log(d.rawvotes+d.rawcomments));
         return d.socialactivity;
-    }
+    }    
     
-    function testAddOneMoreNews(json)
-    {
-        var elem;
-        for (var i = 0; i < tempCounter; i++)
-        {
-            elem = json.children.pop();
-            json.children.push(elem);
-            elem.id = elem.id+1000000;
-            elem.rawcomments *= 1.5;
-            json.children.push( $.extend(true,{},elem));
-            newsCount+=1;
-        }
-        return json;
-    }
-    
-    var tempCounter = 1;
     my.update = function(params)
-    {
+    {   
         params = params || {}
 
         if(timeoutId!=null)
@@ -360,6 +341,9 @@ var NM = (function($)
 
         if(params.progress==undefined) 
             params.progress = true;
+        
+        if(params.deleteall==undefined) 
+            params.deleteall = true;
         
         if(params.progress==true)
         {
@@ -382,7 +366,7 @@ var NM = (function($)
         if(params.url==undefined)
         {
             //console.log(1);
-            NM.url("news2ru.json");
+            NM.url("news2ru");
         }
         else
         {
@@ -391,6 +375,25 @@ var NM = (function($)
         }
         
         //console.log(url);
+        
+        function func_helper(d)
+        {
+                if(d.children)
+                {
+                    return d3.extent(d.children.map(func_helper));
+                }
+                else
+                {
+                    return computeColor(d);
+                }
+        }
+        
+        function findMinMax2(d)
+        {
+            var result = d.children.map(func_helper);
+            result=d3.extent(d3.merge(result));
+            return result;
+        }
     
         d3.text(url, "application/json", function(text) 
         {
@@ -423,27 +426,24 @@ var NM = (function($)
             var he = div.style("height");
             he = he.substring(0,he.length-2);
             treemap.size([wi-1,he-1]);
+                         
+            extent = findMinMax2(json);
+            minUserColorValue = extent[0];
+            maxUserColorValue = extent[1];
             
-            //json = testAddOneMoreNews(json);
-         
-            minUserColorValue = d3.min(json.children, computeColor);
-            maxUserColorValue = d3.max(json.children, computeColor);
-            
-            //console.log( "min", minUserColorValue);
-            //console.log( "max", maxUserColorValue);
+            console.log( "min", minUserColorValue);
+            console.log( "max", maxUserColorValue);
             
             colormap = d3.scale.linear()
             .domain([minUserColorValue, maxUserColorValue])
-            .range([startColor, endColor]);
+            .range([gradientColors[0][0], gradientColors[0][1]]);
             
-            //json.children = json.children.reverse();
-            //newsCount = json.children.length;
-            //console.log("after",tempCounter,newsCount);
-            tempCounter+=1;
-            //console.log(json);
-        
+            if(params.deleteall)
+                div.selectAll("div").remove();
+            
             var selection = 
-            div.data([json])
+            div
+            .data([json])
             .selectAll("div")
             .data(treemap.nodes, function(d){ return +d.id; });
             
@@ -498,11 +498,26 @@ var NM = (function($)
         });
     }
     
+    function hueShift(hsl,shift)
+    {
+        hsl.h += shift;
+        return hsl;
+    }
+    
     my.init = function(params)
     {
         //console.log("NM.init");
         $(window).resize(NM.redraw);          
 
+        var hslStart = d3.hsl(startColor);
+        var hslEnd   = d3.hsl(endColor);
+        
+        for(var i=0;i<5;i++)
+        {
+            gradientColors[i] = [];
+            gradientColors[i][0] = hueShift(d3.hsl(startColor),i*50);
+            gradientColors[i][1] = hueShift(d3.hsl(endColor),i*50);
+        }
         
         div = d3.select("#chart").append("div")
         .style("position", "absolute")
@@ -522,85 +537,13 @@ var NM = (function($)
                         .ratio(1.0)
                         .sticky(false)
                         .sort(sortFunction)
-                        .value(sizeFunction);
+                        .value(sizeFunction)
+                        .padding(0);
 
         $('<div />', {'id': 'div-resizer', 'class': 'cell'}).hide().appendTo(document.body);
         $('#div-resizer').append('<a id="a-resizer" class="newslink"></a>');
 
-        this.update( params );
-        
-        //d3.json("http://novomapia.com/news2ru/json/", function(json) 
-        // d3.json("news2ru.json", function(json) 
-        // {
-            // newsCount = json.children.length;
-            // //json.children = json.children.reverse();
-
-            // var wi = div.style("width");
-            // wi = wi.substring(0,wi.length-2);
-            // var he = div.style("height");
-            // he = he.substring(0,he.length-2);
-            // treemap.size([wi-1,he-1]);
-            
-            // div
-            // .data([json])
-            // .selectAll("div")
-            // .data(treemap.nodes,function(d){ return d.id; })
-            // .enter()
-            // .append("div")
-            // .attr("class", "cell")
-            // .style('background-color', colorFunction )
-            // .html(function(d) { return d.children ? null : '<a class="newslink" href="'+d.link+'">'+d.title+'</a>'; })
-            // .attr("title", function(d) { return d.title; })
-            // .attr("data-content", function(d) { return d.img+'<span>'+d.description+'</span>'; })
-            // .call(cell);
-            
-            // //.each(autofit);
-           
-            
-            // minUserColorValue = 10000000.;
-            // maxUserColorValue = 0.;
-            // div.selectAll("div")
-            // .each(calcUserColor);
-            // calcUserColorMap();
-            // colorFunction = function(d) { return d.children ? null : colorUserFunction(d); }; 
-            // recolor();
-            
-            
-            // div.selectAll("div")
-            // .each(calculateTargetFontSize)
-            // .style('font-size', function(d){ return d.fontsize+'px'; });
-            
-            // /*
-            // $('.cell').popover({
-                    // title: 'tooltip',
-                    // content: '<h1>content</h1>',
-                    // delay: { show: 500, hide: 100 },
-                    // placement: function(e,f,g) {
-                                                    // var 
-                                                    // wh = $(window).height(),
-                                                    // ww = $(window).width(),
-                                                    // o = $(f).offset(),
-                                                    // oh = $(f).height(),
-                                                    // ow = $(f).width(),
-                                                    // r1 = 2.*o.left/ww,
-                                                    // r2 = 2.*o.top/wh,
-                                                    // fp = $(f).position();
-                                                    // //console.log('t:'+fp.top+'l:'+fp.left+' ww/2: '+ww/2.+' wh/2: '+wh/2.+' o.left:'+o.left + ' o.top:'+o.top);
-                                                    // if(fp.left==0) return 'right';
-                                                    // if(fp.top==0) return 'bottom';
-                                                    // if(o.top>wh/2.) return 'top';
-                                                    // if(o.left>ww/2.) return 'left'; 
-                                                    // //if(b==0) return 'top'; 
-                                                    // return 'right';
-                                                // },
-            // }
-            // );
-            // */
-
-            // //var nodes = treemap.nodes(json);
-        // });
-        
-        
+        this.update( params );        
     };
     
     return my;
@@ -609,92 +552,56 @@ var NM = (function($)
 $(function(){
     
     $(".nav li").removeClass("active");
+       
     if(currentPage=="help")
     {
         $("#help-menu").addClass("active");
     }
-    else if(currentPage=="news2ru")
-    {
-        $("#src-menu").addClass("active");
-        $("#src-menu-text span").text("News2.ru");
-        $("#src-menu li").removeClass("active");
-        $("#src-menu-news2ru").addClass("active");
-    }
-    else if(currentPage=="membrana")
-    {
-        $("#src-menu").addClass("active");
-        $("#src-menu-text span").text("Membrana.ru");
-        $("#src-menu li").removeClass("active");
-        $("#src-menu-membrana").addClass("active");
-    }
 
+    console.log(currentPage);
+    var currentUrl = 'http://'+window.location.host+'/json/'+currentPage.join('+');
+    console.log(currentUrl);
+    
     if(fontLoaded===1)
     {
-        //console.log("font is already loaded");
-        NM.init({ url: 'http://'+window.location.host+'/json/'+currentPage, colordelay: 3000});
+        NM.init({ url: currentUrl, colordelay: 3000});
     }
     else
     {
-        //console.log("font is not loaded yet");
-        onFontLoaded = function() { /*console.log("initializing map");*/ NM.init({ url: 'http://'+window.location.host+'/json/'+currentPage, colordelay: 3000}); };
+        onFontLoaded = function() { NM.init({ url: currentUrl, colordelay: 3000}); };
     }
 
-    $('.dropdown-toggle').dropdown();
-
-    $("#help-menu").click(function(event) 
+    $('input[name="sources"]').change( function()
     {
-        console.log("#help-menu");
-        event.preventDefault();
-        history.pushState(currentPage,currentPage,'/help');
-        currentPage = 'help';
-        $(".nav li").removeClass("active");
-        $("#help-menu").addClass("active");
-        NM.update( { url: "json/help", colordelay: 3000} );
-    });
-
-    $("#src-menu-news2ru").click(function(event) 
-    {
-        console.log("#src-menu-news2ru");
-        event.preventDefault();
-        history.pushState(currentPage,currentPage,'/news2ru');
-        currentPage = 'news2ru';
-        $(".nav li").removeClass("active");
-        $("#src-menu").addClass("active");
-        $("#src-menu-text span").text("News2.ru");
-        $("#src-menu li").removeClass("active");
-        $("#src-menu-news2ru").addClass("active");
-        NM.update( { url: "/json/news2ru", colordelay: 3000} );
-    });
-
-    $("#src-menu-membrana").click(function(event) 
-    {
-        console.log("#src-menu-membrana");
-        event.preventDefault();
-        history.pushState(currentPage,currentPage,'/membrana');
-        currentPage = 'membrana';
-        $(".nav li").removeClass("active");
-        $("#src-menu").addClass("active");
-        $("#src-menu-text span").text("Membrana.ru");
-        $("#src-menu li").removeClass("active");
-        $("#src-menu-membrana").addClass("active");
-        NM.update( { url: "/json/membrana", colordelay: 3000} );
+        console.log("checkbox");
+        //event.preventDefault();
+        var sources = [];
+        $('#src-menu input[name="sources"]').each( function()
+        {
+            console.log($(this).attr('id').split('-')[1] + ":" + $(this).is(":checked") );
+            if($(this).is(":checked"))
+                sources.push($(this).attr('id').split('-')[1]);
+        });
+        console.log("pushstate:"+currentPage);
+        currentPage = sources;
+        history.pushState(currentPage,currentPage,'/'+sources.join('+'));
+        
+        NM.update( { url: "/json/"+sources.join('+'), colordelay: 3000, deleteall: true} );
     });
     
     window.onpopstate = function (event) {
         var menu_id;
-        switch(event.state)
+        console.log("onpopstate: "+event.state);
+        if(event.state)
         {
-            case 'news2ru':
-                $("#src-menu-news2ru").click();
-                break;
-            case 'membrana':
-                $("#src-menu-membrana").click();
-                break;
-            case 'help':
-                $("#help-menu").click();
-                break;
+            currentPage = event.state;
+            NM.update( { url: "/json/"+currentPage.join('+'), colordelay: 3000, deleteall: true} );
         }
-        // see what is available in the event object
+        /*else
+        {
+            currentPage = ['news2ru'];
+            NM.update( { url: "/json/"+currentPage.join('+'), colordelay: 3000, deleteall: true} );
+        }*/
         console.log(event.state);
     }
 
